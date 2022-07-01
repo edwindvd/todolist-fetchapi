@@ -1,8 +1,37 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 export const ToDo = () => {
     const [taskList, setTaskList] = useState([]);
     const [task, setTask] = useState("");
+
+    useEffect(()=>{
+        console.log("fui montado");
+        let response = fetch("https://randomuser.me/api")
+        
+        .then((respuesta)=>{
+                
+                return respuesta.json()
+
+
+        }).then((yeison)=>{
+                console.log(yeison)
+        })
+        .catch(()=>{
+                console.log("fui rechazado")
+
+        })
+        
+
+
+
+    } ,[] )
+
+
+
+
+
+
+
     const handlerTask = (event) => {
         setTask(event.target.value)
     }
