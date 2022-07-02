@@ -14,7 +14,8 @@ export const ToDo = () => {
 
 
         }).then((yeison)=>{
-                console.log(yeison)
+                // console.log(yeison)
+                setTaskList(yeison)
         })
         .catch(()=>{
                 console.log("fui rechazado")
@@ -56,7 +57,7 @@ return (
                 <div className='Card' id="card">
                     <div className="form-floating mb-3">
                         <input onChange={handlerTask} value={task} onKeyDown={handlerKeyPress} type="text" className="form-control" id="floatingInput" placeholder="Tasks to do"/>
-                        <label for="floatingInput">Tarea por hacer</label>
+                        <label htmlFor="floatingInput">Tarea por hacer</label>
                             {
                                 taskList.map((tarea, i)=>{
                                     return (
