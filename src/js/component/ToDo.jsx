@@ -2,11 +2,12 @@ import React, {useEffect, useState} from 'react';
 export const ToDo = () => {
     const [taskList, setTaskList] = useState([]);
     const [task, setTask] = useState("");
+    const [isShown, setIsshown] = useState(-1);
     useEffect(()=>{
         console.log("fui montado");
         let response = fetch("https://randomuser.me/api")
         .then ((respuesta)=>{
-             return respuesta.json()
+        return respuesta.json()
         }).then((yeison)=>{
             console.log(yeison)
         })
@@ -40,9 +41,10 @@ return (
                                 taskList.map((tarea, i)=>{
                                     return (
                                         <div className="Card card m-1" key={`s-${i}`}>
-                                            <div className="modal-header">
+                                            <div className="modal-header" onMouseEnter={()=>{setIsshown(i)}} onMouseLeave={()=>{setIsshown(-100)}} >
                                                 <h4 className="modal-title" key={i}> {tarea}
-                                                    <button type="button" className="btn-close btn-danger" key={`p-${i}`} onClick={(event) => handlerButtomDelete(i)}></button>
+                                                    { isShown == i &&
+                                                        <button type="button" className="btn-close btn-danger" key={`p-${i}`} onClick={(event) => handlerButtomDelete(i)}></button>}
                                                 </h4>
                                             </div>
                                         </div>
