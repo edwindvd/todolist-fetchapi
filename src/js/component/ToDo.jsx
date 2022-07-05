@@ -1,24 +1,36 @@
 import React, {useEffect, useState} from 'react';
+
 export const ToDo = () => {
+
     const [taskList, setTaskList] = useState([]);
     const [task, setTask] = useState("");
     const [isShown, setIsshown] = useState(-1);
+    
     useEffect(()=>{
+
         console.log("fui montado");
         let response = fetch("https://randomuser.me/api")
+
         .then ((respuesta)=>{
+
         return respuesta.json()
+
         }).then((yeison)=>{
+
             console.log(yeison)
         })
         .catch(()=>{
+
             console.log("fui rechazado")
         })
     } , [] )
+
     const handlerTask = (event) => {
         setTask(event.target.value)
     }
+
     const handlerKeyPress = (event) => {
+
         // event.preventDefault();
         if(event.key === "Enter") {
         if(task != ""){
@@ -27,8 +39,10 @@ export const ToDo = () => {
         }
         }
     }
-    const handlerButtomDelete = (indexid) => setTaskList(taskList.filter((tarea , index) => (index != indexid)));
+
+const handlerButtomDelete = (indexid) => setTaskList(taskList.filter((tarea , index) => (index != indexid)));
 // factorizando el codigo
+
 return (
     <div className='row mt-5'>
         <div className='col-3'></div>
@@ -48,7 +62,7 @@ return (
                                                 </h4>
                                             </div>
                                         </div>
-                                )
+                                            )
                                 })
                             }
                     </div>
