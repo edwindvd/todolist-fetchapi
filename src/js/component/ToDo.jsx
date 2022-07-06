@@ -13,7 +13,7 @@ export const ToDo = () => {
 
         .then ((respuesta)=>{
 
-        return respuesta.json()
+        return respuesta.json() // convierte de Json a Objeto de js
 
         }).then((yeison)=>{
 
@@ -32,12 +32,18 @@ export const ToDo = () => {
     const handlerKeyPress = (event) => {
 
         // event.preventDefault();
-        if(event.key === "Enter") {
-        if(task != ""){
+        if(event.key === "Enter" && task != ""){
+            const tarea = {
+                label: task,
+                done: false,
+            }
             setTaskList([...taskList,task])
             setTask("")
         }
-        }
+    }
+
+    const newTask = (task) => {
+
     }
 
 const handlerButtomDelete = (indexid) => setTaskList(taskList.filter((tarea , index) => (index != indexid)));
