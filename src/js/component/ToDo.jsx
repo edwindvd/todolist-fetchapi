@@ -9,7 +9,7 @@ export const ToDo = () => {
     useEffect(()=>{
 
         console.log("fui montado");
-        let response = fetch("https://randomuser.me/api")
+        let response = fetch("https://assets.breatheco.de/apis/fake/todos/user/edwindvd")
 
         .then ((respuesta)=>{
 
@@ -17,7 +17,7 @@ export const ToDo = () => {
 
         }).then((yeison)=>{
 
-            console.log(yeison)
+            setTaskList(yeison)
         })
         .catch(()=>{
 
@@ -25,55 +25,82 @@ export const ToDo = () => {
         })
     } , [] )
 
-    const handlerTask = (event) => {
-        setTask(event.target.value)
+  const handlerTask = (event) => {
+    setTask(event.target.value);
+  };
+
+  const handlerKeyPress = (event) => {
+    // event.preventDefault();
+
+    if (event.key === "Enter") {
+      if (task != "") {
+        setTaskList([...taskList, task]);
+        setTask("");
+      }
     }
+  };
 
-    const handlerKeyPress = (event) => {
+  const handlerButtomDelete = (indexid) =>
+    setTaskList(taskList.filter((tarea, index) => index != indexid));
+  // factorizando el codigo
 
-        // event.preventDefault();
-        if(event.key === "Enter" && task != ""){
-            const tarea = {
-                label: task,
-                done: false,
-            }
-            setTaskList([...taskList,task])
-            setTask("")
-        }
-    }
-
-    const newTask = (task) => {
-
-    }
-
-const handlerButtomDelete = (indexid) => setTaskList(taskList.filter((tarea , index) => (index != indexid)));
-// factorizando el codigo
-
-return (
-    <div className='row mt-5'>
-        <div className='col-3'></div>
-            <div className='col-6'>
-                <div className='Card' id="card">
-                    <div className="form-floating mb-3">
-                        <input onChange={handlerTask} value={task} onKeyDown={handlerKeyPress} type="text" className="form-control" id="floatingInput" placeholder="Tasks to do"/>
-                        <label htmlFor="floatingInput">Tarea por hacer</label>
-                            {
-                                taskList.map((tarea, i)=>{
-                                    return (
-                                        <div className="Card card m-1" key={`s-${i}`}>
-                                            <div className="modal-header" onMouseEnter={()=>{setIsshown(i)}} onMouseLeave={()=>{setIsshown(-100)}} >
-                                                <h4 className="modal-title" key={i}> {tarea}
-                                                    { isShown == i &&
-                                                        <button type="button" className="btn-close btn-danger" key={`p-${i}`} onClick={(event) => handlerButtomDelete(i)}></button>}
-                                                </h4>
-                                            </div>
-                                        </div>
-                                            )
-                                })
-                            }
-                    </div>
+  return (
+    <div className="row mt-5">
+      <div className="col-3"></div>
+      <div className="col-6">
+        <div className="Card " id="card">
+          <div className="form-floating mb-3 form-control border-primary">
+            <input
+              onChange={handlerTask}
+              value={task}
+              onKeyDown={handlerKeyPress}
+              type="text"
+              className="form-control text-primary text-opacity-75"
+              id="floatingInput"
+              placeholder="Tasks to do"
+            />
+            <label
+              htmlFor="floatingInput"
+              className="text-primary text-opacity-50"
+            >
+              {" "}
+              <h6>
+              {taskList.length != 0 ? (
+                <>Tienes {taskList.length} tareas pendientes</>
+              ) : (
+                <> No tienes tareas pendientes, agrega una</>
+              )}
+            </h6>{" "}
+            </label>
+            {taskList.map((tarea, i) => {
+              return (
+                <div className="Card card m-1" key={i} 
+                onMouseEnter={()=>{setIsshown(i)}} onMouseLeave={()=>{setIsshown(-100)}}>
+                  <div className="modal-header">
+                    <h4 className="modal-title text-primary fw-bolder">
+                      {" "}
+                      {tarea.label}
+                    </h4>
+                    { isShown == i &&
+                    <button
+                      type="button"
+                      className="elem btn-close btn-primary"
+                      onClick={(event) => handlerButtomDelete(i)}
+                    ></button>}
+                  </div>
                 </div>
-            </div>
+              );
+            })}
+          </div>
+          <>
+            <button type="button" className='btn-warning'>
+                Borrar todas las tareas
+		    </button>
+          </>
+        </div>
+      </div>
     </div>
-)
-}
+  );
+};
+
+export default ToDo;
