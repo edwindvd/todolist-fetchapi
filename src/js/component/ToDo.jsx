@@ -34,11 +34,19 @@ export const ToDo = () => {
 
     if (event.key === "Enter") {
       if (task != "") {
-        setTaskList([...taskList, task]);
+
+        const tarea = {
+            label: task,
+            done: false
+        }
+
+        setTaskList([...taskList, tarea]);
         setTask("");
       }
     }
   };
+// esta recibiedo una tarea queno me importa como se llame
+//   const newTask = (task) =>
 
   const handlerButtomDelete = (indexid) =>
     setTaskList(taskList.filter((tarea, index) => index != indexid));
