@@ -6,44 +6,72 @@ export const ToDo = () => {
     const [task, setTask] = useState("");
     const [isShown, setIsshown] = useState(-1);
     
-    useEffect(()=>{
+    let URL = "https://assets.breatheco.de/apis/fake/todos/user/edwindvd"
 
-        console.log("fui montado");
-        let response = fetch("https://assets.breatheco.de/apis/fake/todos/user/edwindvd")
+    const POSTEANDO = {
+        method: "POST",
+        body: JSON.stringify(taskList),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    
+    const BORRANDO = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
 
-        .then ((respuesta)=>{
+      const PUTEANDO = {
+        method: "PUT",
+        body: JSON.stringify(taskList),
+        headers: {
+            "Content-Type": "application/json"
+        }
+      }
 
-        return respuesta.json() // convierte de Json a Objeto de js
+    useEffect(()=>{getApiData()}, [])
 
-        }).then((yeison)=>{
+    const getApiData= async ()=>{
 
-            setTaskList(yeison)
-        })
-        .catch(()=>{
-
-            console.log("fui rechazado")
-        })
-    } , [] )
+        let response = await fetch(URL)
+        if(response.ok){
+            let respuesta = await response.json() // convierte de Json a Objeto de js
+            setTaskList(respuesta)
+            setTask("")
+        }else{
+            let addUser = await fetch(URL, POSTEANDO)
+                if(addUser.ok){
+            console.log("usuario iniciado")
+        }}
+        return console.log("iniciado")
+    }
 
   const handlerTask = (event) => {
     setTask(event.target.value);
   };
 
-  const handlerKeyPress = (event) => {
-    // event.preventDefault();
-
+  const handlerKeyPress = async (event) => {
     if (event.key === "Enter") {
       if (task != "") {
-
-        const tarea = {
-            label: task,
-            done: false
-        }
-
-        setTaskList([...taskList, tarea]);
-        setTask("");
+          setTaskList([...taskList, tarea]);
+          setTask("");
+          const tarea = {
+              label: task,
+              done: false
+          }
       }
-    }
+
+      let response = await fetch(URL, PUTEANDO )
+        if(response.ok){
+            let respuesta = await fetch(URL);
+            let apiData = await respuesta.json();
+            setTaskList(apiData);
+            setTask("");
+        }else{
+            alert("burro")
+        }
   };
 // esta recibiedo una tarea queno me importa como se llame
 //   const newTask = (task) =>
@@ -110,5 +138,5 @@ export const ToDo = () => {
     </div>
   );
 };
-
+}
 export default ToDo;
