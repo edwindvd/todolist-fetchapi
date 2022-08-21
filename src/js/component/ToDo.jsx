@@ -2,32 +2,24 @@ import React, {useEffect, useState} from 'react';
 
 export const ToDo = () => {
 
-    const [taskList, setTaskList] = useState([]);
-    const [task, setTask] = useState("");
-    const [isShown, setIsshown] = useState(-1);
-    
-    let URL = "https://assets.breatheco.de/apis/fake/todos/user/edwindvd"
+  const [taskList, setTaskList] = useState([]);
+  const [task, setTask] = useState("");
+  const [isShown, setIsshown] = useState(-1);
+  
+  let URL = "https://assets.breatheco.de/apis/fake/todos/user/edwindvd"
 
     const POSTEANDO = {
-        method: "POST",
-        body: JSON.stringify(taskList),
-        headers: {
-          "Content-Type": "application/json"
-        }
+      method: "POST",
+      body: JSON.stringify(taskList),
+      headers: {
+        "Content-Type": "application/json"
       }
+    }
     
     const BORRANDO = {
-        method: "DELETE",
+      method: "DELETE",
         headers: {
           "Content-Type": "application/json"
-        }
-      }
-
-      const PUTEANDO = {
-        method: "PUT",
-        body: JSON.stringify(taskList),
-        headers: {
-            "Content-Type": "application/json"
         }
       }
 
@@ -53,17 +45,22 @@ export const ToDo = () => {
   };
 
   const handlerKeyPress = async (event) => {
-    if (event.key === "Enter") {
-      if (task != "") {
-          setTaskList([...taskList, tarea]);
-          setTask("");
-          const tarea = {
+    if (event.key === "Enter" && task != "") {
+          setTaskList([...taskList, task]);
+          let newList = taskList;
+          newList.push({
               label: task,
               done: false
-          }
-      }
+          })
 
-      let response = await fetch(URL, PUTEANDO )
+      let response = await fetch(URL,{
+        method: "PUT",
+        body: JSON.stringify(newList),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+
         if(response.ok){
             let respuesta = await fetch(URL);
             let apiData = await respuesta.json();
@@ -72,13 +69,57 @@ export const ToDo = () => {
         }else{
             alert("burro")
         }
-  };
+  }
+};
 // esta recibiedo una tarea queno me importa como se llame
 //   const newTask = (task) =>
 
-  const handlerButtomDelete = (indexid) =>
-    setTaskList(taskList.filter((tarea, index) => index != indexid));
+  const handlerButtomDelete = async (indexid) =>{
+
+  const filterList = taskList.filter((tarea, index) => index != indexid);
   // factorizando el codigo
+
+      if(filterList.length > 0){
+        let response = await fetch(URL, {
+    method: "PUT",
+    body: JSON.stringify(filterList),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+      if (response.ok) {
+        setTaskList(filterList); 
+      } else {
+      alert("fuck");
+      }
+    } else {
+      let response = await fetch(URL, BORRANDO);
+        if (response.ok) {
+          setTaskList([]);
+              console.log("se borro todo")
+            let createuser = await fetch(URL, POSTEANDO) 
+            if(createuser.ok){
+              console.log("usuario iniciado");
+        }
+      } else {
+        alert("No sabes o que");
+      }
+}
+}
+
+  //borrando todo
+  const handlerDelete = async () =>{
+      setTaskList(taskList.length = [])
+      let response = await fetch(URL , BORRANDO) 
+      if(response.ok){
+          console.log("adios a todas")
+      }
+      let createuser = await fetch(URL, POSTEANDO)
+      if(createuser.ok){
+          console.log("usuario iniciado")
+      }
+  }  
+
 
   return (
     <div className="row mt-5">
@@ -108,14 +149,14 @@ export const ToDo = () => {
               )}
             </h6>{" "}
             </label>
-            {taskList.map((tarea, i) => {
+            {taskList.map((task, i) => {
               return (
                 <div className="Card card m-1" key={i} 
                 onMouseEnter={()=>{setIsshown(i)}} onMouseLeave={()=>{setIsshown(-100)}}>
                   <div className="modal-header">
                     <h4 className="modal-title text-primary fw-bolder">
                       {" "}
-                      {tarea.label}
+                      {task.label}
                     </h4>
                     { isShown == i &&
                     <button
@@ -129,14 +170,14 @@ export const ToDo = () => {
             })}
           </div>
           <>
-            <button type="button" className='btn-warning'>
+            <button type="button" className='btn-warning' onClick={(event) => handlerDelete()}>
                 Borrar todas las tareas
-		    </button>
+		        </button>
           </>
         </div>
       </div>
     </div>
   );
 };
-}
+
 export default ToDo;
